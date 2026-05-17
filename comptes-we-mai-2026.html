@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comptes — Week-end Mai 2026</title>
+  <style>
+    :root {
+      --bg: #f5f5f0;
+      --card: #ffffff;
+      --primary: #1a1a2e;
+      --accent: #4a90d9;
+      --green: #2d9b6f;
+      --green-light: #eaf7f1;
+      --red: #d94a4a;
+      --red-light: #fdf0f0;
+      --border: #e8e8e8;
+      --text: #2c2c2c;
+      --muted: #888;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 0 0 60px;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+    .header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 0.85rem; opacity: 0.65; }
+
+    /* BANNER DEFINITIF */
+    .banner-definitif {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      margin: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    /* SECTION */
+    .section {
+      margin: 20px 16px 0;
+    }
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* ROW */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .row:last-child { border-bottom: none; }
+    .row-label { font-size: 0.95rem; }
+    .row-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .row-value { font-size: 0.95rem; font-weight: 600; text-align: right; }
+    .row-value.muted { font-weight: 400; color: var(--muted); }
+
+    /* HIGHLIGHT ROW */
+    .row-highlight {
+      background: #f9f9f9;
+    }
+
+    /* RÈGLES */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .rule-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .rule-card .rule-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .rule-card .rule-title { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .rule-card .rule-text { font-size: 0.88rem; line-height: 1.4; }
+
+    /* STAT HIGHLIGHT */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .stat-card .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .stat-card .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    /* VIREMENT CARDS */
+    .virement-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .virement-montant {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--red);
+      min-width: 90px;
+      text-align: right;
+    }
+    .virement-info { flex: 1; }
+    .virement-de { font-size: 0.95rem; font-weight: 600; }
+    .virement-vers { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+    /* BILAN SOLDES */
+    .solde-positif { color: var(--green); font-weight: 700; }
+    .solde-negatif { color: var(--red); font-weight: 700; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 32px;
+      padding: 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Week-end 8–10 mai 2026</h1>
+    <p>Répartition des dépenses</p>
+  </div>
+
+  <!-- RÈGLES -->
+  <div class="section">
+    <div class="section-title">Règles de répartition</div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-icon">🏠</div>
+        <div class="rule-title">Airbnb</div>
+        <div class="rule-text">Par chambre occupée — chaque chambre = 1/8 du total</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">🛒</div>
+        <div class="rule-title">Courses</div>
+        <div class="rule-text">Adulte = 1 part · Enfant = 0,5 part (alcool exclu)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="section">
+    <div class="section-title">Total des dépenses</div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-value">2 120 €</div>
+        <div class="stat-label">Airbnb</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1 062 €</div>
+        <div class="stat-label">Courses</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row row-highlight">
+        <div class="row-label" style="font-weight:700;">Total général</div>
+        <div class="row-value" style="font-size:1.1rem; color:var(--accent);">3 182 €</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Avancé par Vivi + JF</div>
+        <div class="row-value">2 220 €</div>
+      </div>
+      <div class="row">
+        <div class="row-label" style="color:var(--muted);">dont Airbnb</div>
+        <div class="row-value muted">2 120 €</div>
+      </div>
+      <div class="row">
+        <div class="row-label" style="color:var(--muted);">dont Courses</div>
+        <div class="row-value muted">100 €</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AIRBNB -->
+  <div class="section">
+    <div class="section-title">Airbnb — 1 part = 265 €</div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="row-label">Nicolas + Magali</div>
+          <div class="row-sub">1 chambre · 3 pers.</div>
+        </div>
+        <div class="row-value">265,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Val + Gio</div>
+          <div class="row-sub">2 chambres · 4 pers.</div>
+        </div>
+        <div class="row-value">530,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Cécile + Peio</div>
+          <div class="row-sub">2 chambres · 4 pers.</div>
+        </div>
+        <div class="row-value">530,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Vivi + JF</div>
+          <div class="row-sub">1 chambre · 3 pers. · ont payé l'Airbnb</div>
+        </div>
+        <div class="row-value muted">leur part</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Gégé + Émilien</div>
+          <div class="row-sub">1 chambre · 3 pers.</div>
+        </div>
+        <div class="row-value">265,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Alix</div>
+          <div class="row-sub">1/2 chambre partagée avec Julien</div>
+        </div>
+        <div class="row-value">132,50 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Julien</div>
+          <div class="row-sub">1/2 chambre partagée avec Alix</div>
+        </div>
+        <div class="row-value">132,50 €</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COURSES -->
+  <div class="section">
+    <div class="section-title">Courses — 1 part = 68,49 €</div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="row-label">Gégé + Émilien</div>
+          <div class="row-sub">ont payé · 2,5 parts dues</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">276,63 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Val + Gio</div>
+          <div class="row-sub">ont payé · 3 parts dues</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">200,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Alix</div>
+          <div class="row-sub">a payé · 1 part due</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">180,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Cécile + Peio</div>
+          <div class="row-sub">ont payé · 3 parts dues</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">150,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Vivi + JF</div>
+          <div class="row-sub">ont payé · 2,5 parts dues</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">100,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Julien</div>
+          <div class="row-sub">a payé · 1 part due</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">70,00 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Nicolas + Magali</div>
+          <div class="row-sub">ont payé · 2,5 parts dues</div>
+        </div>
+        <div class="row-value" style="color:var(--green);">85,00 €</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BILAN -->
+  <div class="section">
+    <div class="section-title">Bilan par famille</div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="row-label">Cécile + Peio</div>
+          <div class="row-sub">Dû : 735 € · Payé : 150 €</div>
+        </div>
+        <div class="row-value solde-negatif">−585,48 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Val + Gio</div>
+          <div class="row-sub">Dû : 735 € · Payé : 200 €</div>
+        </div>
+        <div class="row-value solde-negatif">−535,48 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Nicolas + Magali</div>
+          <div class="row-sub">Dû : 436 € · Payé : 85 €</div>
+        </div>
+        <div class="row-value solde-negatif">−351,23 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Gégé + Émilien</div>
+          <div class="row-sub">Dû : 436 € · Payé : 277 €</div>
+        </div>
+        <div class="row-value solde-negatif">−159,60 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Julien</div>
+          <div class="row-sub">Dû : 201 € · Payé : 70 €</div>
+        </div>
+        <div class="row-value solde-negatif">−130,99 €</div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row-label">Alix</div>
+          <div class="row-sub">Dû : 201 € · Payé : 180 €</div>
+        </div>
+        <div class="row-value solde-negatif">−20,99 €</div>
+      </div>
+      <div class="row row-highlight">
+        <div>
+          <div class="row-label" style="font-weight:700;">Vivi + JF</div>
+          <div class="row-sub">Dû : 436 € · Payé : 2 220 €</div>
+        </div>
+        <div class="row-value solde-positif">+1 783,77 €</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIREMENTS -->
+  <div class="section">
+    <div class="section-title">Virements à effectuer</div>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:12px; padding-left:2px;">Tous les virements vont directement à <strong>Vivi + JF</strong></p>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Cécile + Peio</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">585,48 €</div>
+    </div>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Val + Gio</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">535,48 €</div>
+    </div>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Nicolas + Magali</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">351,23 €</div>
+    </div>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Gégé + Émilien</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">159,60 €</div>
+    </div>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Julien</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">130,99 €</div>
+    </div>
+
+    <div class="virement-card">
+      <div class="virement-info">
+        <div class="virement-de">Alix</div>
+        <div class="virement-vers">→ Vivi + JF</div>
+      </div>
+      <div class="virement-montant">20,99 €</div>
+    </div>
+  </div>
+
+
+</body>
+</html>
