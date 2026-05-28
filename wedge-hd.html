@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hidden Distillery — Pré-Production Stratégique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:     #13110E;
+      --paper:   #F2EDE3;
+      --saffron: #E89B3C;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Hanken Grotesk', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── GATE ─────────────────────────────────────────────── */
+    #gate {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 24px;
+      transition: opacity 0.5s ease;
+    }
+    #gate.hidden { opacity: 0; pointer-events: none; }
+    #gate-logo {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--saffron);
+      letter-spacing: 0.05em;
+    }
+    #gate h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--paper);
+      text-align: center;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+    #gate p {
+      font-size: 0.85rem;
+      color: rgba(242, 237, 227, 0.5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    #gate-form { display: flex; gap: 0; margin-top: 8px; }
+    #gate-input {
+      padding: 14px 20px;
+      background: rgba(242, 237, 227, 0.07);
+      border: 1px solid rgba(242, 237, 227, 0.2);
+      border-right: none;
+      color: var(--paper);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      outline: none;
+      border-radius: 4px 0 0 4px;
+      width: 220px;
+      transition: border-color 0.2s;
+    }
+    #gate-input:focus { border-color: var(--saffron); }
+    #gate-input::placeholder { color: rgba(242, 237, 227, 0.3); }
+    #gate-btn {
+      padding: 14px 24px;
+      background: var(--saffron);
+      border: 1px solid var(--saffron);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+      transition: background 0.2s;
+      letter-spacing: 0.03em;
+    }
+    #gate-btn:hover { background: #d4882e; }
+    #gate-error {
+      font-size: 0.8rem;
+      color: #C7892F;
+      min-height: 1em;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── LAYOUT ───────────────────────────────────────────── */
+    section {
+      padding: clamp(64px, 10vw, 120px) clamp(24px, 6vw, 80px);
+    }
+    .ink   { background: var(--ink);   color: var(--paper); }
+    .paper { background: var(--paper); color: var(--ink); }
+
+    .label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 32px;
+    }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    /* ── REVEAL ───────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: clamp(80px, 12vw, 140px);
+      padding-bottom: clamp(64px, 10vw, 120px);
+    }
+    #hero .eyebrow {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(242, 237, 227, 0.45);
+      margin-bottom: 28px;
+    }
+    #hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 400;
+      line-height: 1.0;
+      color: var(--paper);
+      margin-bottom: 24px;
+    }
+    #hero h1 em { font-style: italic; color: var(--saffron); }
+    #hero .sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(242, 237, 227, 0.6);
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 56px;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat-num {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      color: var(--saffron);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      color: rgba(242, 237, 227, 0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── PIVOT ────────────────────────────────────────────── */
+    .divider {
+      width: 48px; height: 2px;
+      background: var(--saffron);
+      margin-bottom: 40px;
+    }
+    #pivot .blockquote-wrap {
+      border-left: 3px solid var(--saffron);
+      padding-left: 32px;
+      margin-bottom: 48px;
+    }
+    #pivot .quote {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      line-height: 1.3;
+      color: var(--paper);
+      font-weight: 400;
+      font-style: italic;
+    }
+    #pivot .quote-author {
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: rgba(242, 237, 227, 0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    #pivot .pivot-body {
+      font-size: 1.05rem;
+      color: rgba(242, 237, 227, 0.65);
+      max-width: 620px;
+      line-height: 1.85;
+    }
+
+    /* ── CIBLES ───────────────────────────────────────────── */
+    #cibles .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      margin-top: 40px;
+    }
+    .card {
+      background: rgba(242, 237, 227, 0.04);
+      border: 1px solid rgba(242, 237, 227, 0.1);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: background 0.25s;
+    }
+    .card:hover { background: rgba(242, 237, 227, 0.07); }
+    .card-trigger {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--saffron);
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--paper);
+      line-height: 1.2;
+    }
+    .card-question {
+      font-size: 0.83rem;
+      color: rgba(242, 237, 227, 0.38);
+      font-style: italic;
+      line-height: 1.55;
+    }
+    .card-args {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-args li {
+      font-size: 0.9rem;
+      color: rgba(242, 237, 227, 0.7);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .card-args li::before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: var(--saffron);
+    }
+
+    /* ── DIRECTION VISUELLE & AMBIANCE SONORE ─────────────── */
+    #direction h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--ink);
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.25;
+      margin-bottom: 56px;
+    }
+    #direction h2 em { font-style: italic; color: #b87a22; }
+    .direction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+    }
+    .direction-block-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(19, 17, 14, 0.38);
+      margin-bottom: 24px;
+    }
+    .direction-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .direction-list li {
+      font-size: 0.92rem;
+      color: rgba(19, 17, 14, 0.68);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .direction-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: #b87a22;
+    }
+    .direction-list li strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ── OBJECTIONS ───────────────────────────────────────── */
+    #objections h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--paper);
+      font-weight: 400;
+      max-width: 640px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .objections-intro {
+      font-size: 0.92rem;
+      color: rgba(242, 237, 227, 0.42);
+      margin-bottom: 56px;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+    .objections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2px;
+    }
+    .objection-group {
+      background: rgba(242, 237, 227, 0.04);
+      border: 1px solid rgba(242, 237, 227, 0.1);
+      padding: 36px 28px;
+    }
+    .objection-cible {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 20px;
+    }
+    .objection-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .objection-list li {
+      font-size: 0.9rem;
+      color: rgba(242, 237, 227, 0.58);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .objection-list li::before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: var(--saffron);
+      font-style: normal;
+    }
+
+    /* ── TOURNAGE ─────────────────────────────────────────── */
+    #tournage h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--paper);
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.25;
+      margin-bottom: 56px;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2px;
+    }
+    .tl-block {
+      padding: 36px 28px;
+      border: 1px solid rgba(242, 237, 227, 0.1);
+      background: rgba(242, 237, 227, 0.03);
+    }
+    .tl-time {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 8px;
+    }
+    .tl-lieu {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--paper);
+      font-weight: 400;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .tl-loc {
+      font-size: 0.78rem;
+      color: rgba(242, 237, 227, 0.38);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .tl-shots {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tl-shots li {
+      font-size: 0.85rem;
+      color: rgba(242, 237, 227, 0.62);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .tl-shots li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--saffron);
+    }
+    .tl-intervenants {
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: rgba(242, 237, 227, 0.32);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── QUESTIONS INTERVIEW ──────────────────────────────── */
+    #questions h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--ink);
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.25;
+      margin-bottom: 56px;
+    }
+    #questions h2 em { font-style: italic; color: #b87a22; }
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 48px;
+    }
+    .question-group-name {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      color: var(--ink);
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .question-group-role {
+      font-size: 0.75rem;
+      color: rgba(19, 17, 14, 0.38);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .question-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 2px solid rgba(232, 155, 60, 0.35);
+      padding-left: 20px;
+    }
+    .question-list li {
+      font-size: 0.88rem;
+      color: rgba(19, 17, 14, 0.62);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ── RÉSULTAT (VIDEO) ─────────────────────────────────── */
+    #resultat h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--paper);
+      font-weight: 400;
+      max-width: 640px;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    #resultat h2 em { font-style: italic; color: var(--saffron); }
+    .resultat-intro {
+      font-size: 0.95rem;
+      color: rgba(242, 237, 227, 0.45);
+      max-width: 580px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+    .video-wrap iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      padding: 48px clamp(24px, 6vw, 80px);
+      border-top: 1px solid rgba(242, 237, 227, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    footer .f-brand {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--saffron);
+      font-size: 1rem;
+    }
+    footer .f-meta {
+      font-size: 0.75rem;
+      color: rgba(242, 237, 227, 0.3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .direction-grid { grid-template-columns: 1fr; gap: 32px; }
+      .questions-grid { gap: 32px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── GATE ──────────────────────────────────────────────── -->
+  <div id="gate">
+    <div id="gate-logo">Nicolas Arcivos</div>
+    <h2>Hidden Distillery<br>Pré-Production Stratégique</h2>
+    <p>Accès privé · Mot de passe requis</p>
+    <form id="gate-form" onsubmit="checkPassword(event)">
+      <input id="gate-input" type="password" placeholder="Mot de passe" autocomplete="off" />
+      <button id="gate-btn" type="submit">Entrer</button>
+    </form>
+    <div id="gate-error"></div>
+  </div>
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <section class="ink" id="hero">
+    <div class="container">
+      <p class="eyebrow reveal">Pré-Production Stratégique · Nicolas Arcivos · 2025</p>
+      <h1 class="reveal reveal-delay-1">
+        Hidden<br><em>Distillery</em>
+      </h1>
+      <p class="sub reveal reveal-delay-2">
+        Avant de tourner une seule image,<br>nous avons construit votre message.
+      </p>
+      <div class="hero-meta reveal reveal-delay-3">
+        <div class="hero-stat">
+          <span class="hero-stat-num">3</span>
+          <span class="hero-stat-label">Cibles identifiées</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">3</span>
+          <span class="hero-stat-label">Lieux de tournage</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">4</span>
+          <span class="hero-stat-label">Intervenants</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PIVOT ─────────────────────────────────────────────── -->
+  <section class="ink" id="pivot">
+    <div class="container">
+      <p class="label reveal">Le message commercial pivot</p>
+      <div class="divider reveal"></div>
+      <div class="blockquote-wrap reveal reveal-delay-1">
+        <p class="quote">"On n'a pas des clients, on a des partenaires."</p>
+        <p class="quote-author">Cédric Carpentier, fondateur Hidden Distillery</p>
+      </div>
+      <p class="pivot-body reveal reveal-delay-2">
+        Avant ce travail, vous décriviez Hidden Distillery avec votre passion. C'est juste, c'est naturel.
+        Mais vos acheteurs professionnels posent une question silencieuse : est-ce que ça va me rapporter ?
+        Vos produits donnent déjà la réponse. Il fallait choisir les mots et les images pour que cette réponse
+        soit évidente, dès les premières secondes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── CIBLES ─────────────────────────────────────────────── -->
+  <section class="ink" id="cibles">
+    <div class="container">
+      <p class="label reveal">Vos 3 cibles</p>
+      <div class="cards">
+
+        <div class="card reveal reveal-delay-1">
+          <p class="card-trigger">Grande et Moyenne Surface</p>
+          <div class="card-title">GMS</div>
+          <p class="card-question">Question silencieuse : "Est-ce que ça va se vendre et me rapporter ?"</p>
+          <ul class="card-args">
+            <li>Visibilité en rayon : le contenant fait le travail</li>
+            <li>Mise en rayon sans stock réserve</li>
+            <li>Gamme claire : 1 rhum, 1 gin, des liqueurs</li>
+            <li>Relation long terme, gagnant-gagnant</li>
+            <li>Vraie marge</li>
+          </ul>
+        </div>
+
+        <div class="card reveal reveal-delay-2">
+          <p class="card-trigger">Cafés, Hôtels, Restaurants</p>
+          <div class="card-title">CHR</div>
+          <p class="card-question">Question silencieuse : "C'est pratique au service ? C'est rentable ?"</p>
+          <ul class="card-args">
+            <li>Bidon 5L à 200L : facile à stocker, facile à empiler</li>
+            <li>Recettes sur-mesure par établissement</li>
+            <li>Disponible chez Metro, livraison directe</li>
+            <li>Délai court, service supérieur à la concurrence</li>
+            <li>Originalité : gin Méditerranée, liqueur de chèvre</li>
+          </ul>
+        </div>
+
+        <div class="card reveal reveal-delay-3">
+          <p class="card-trigger">Consommateurs finaux</p>
+          <div class="card-title">B2C</div>
+          <p class="card-question">Question silencieuse : "Est-ce que c'est bon ? Où le trouver ?"</p>
+          <ul class="card-args">
+            <li>Goût authentique, fait avec soin</li>
+            <li>Flasque inox : objet iconique, pas au fond d'un tiroir</li>
+            <li>Production locale Occitanie, histoire vraie et visible</li>
+            <li>Clients deviennent ambassadeurs</li>
+            <li>Personnalisation disponible</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DIRECTION VISUELLE & AMBIANCE SONORE ──────────────── -->
+  <section class="paper" id="direction">
+    <div class="container">
+      <p class="label reveal">Direction visuelle & ambiance sonore</p>
+      <h2 class="reveal reveal-delay-1">L'atmosphère,<br>définie <em>avant</em> le tournage.</h2>
+      <div class="direction-grid">
+
+        <div class="reveal reveal-delay-1">
+          <p class="direction-block-title">Image</p>
+          <ul class="direction-list">
+            <li><strong>Chaud et intime</strong> : bois, cuivre, reflets ambrés</li>
+            <li><strong>Atelier discret</strong> : on est chez vous, presque secret</li>
+            <li><strong>Lumière douce</strong>, ombres présentes, une lueur qui caresse la matière</li>
+            <li><strong>Proche des gestes</strong> : mains, textures, vapeur</li>
+            <li><strong>Calme et posé</strong> : plans qui prennent le temps</li>
+            <li><strong>Moderne et artisanal</strong> : élégant, sans look rétro forcé</li>
+          </ul>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <p class="direction-block-title">Son</p>
+          <ul class="direction-list">
+            <li><strong>Le son comme personnage</strong> : on entend d'abord le lieu, la musique arrive en dessous</li>
+            <li><strong>Atelier</strong> : souffle de vapeur, métal, portes, pas</li>
+            <li><strong>Matière</strong> : verre posé, cuivre effleuré, bois qui grince</li>
+            <li><strong>GMS</strong> : carton qu'on ouvre, bouteilles qu'on aligne</li>
+            <li><strong>Bar</strong> : liquide qui coule, glaçons, tintement discret</li>
+            <li><strong>Respiration</strong> : moments de silence courts pour sentir le lieu</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OBJECTIONS ANTICIPÉES ─────────────────────────────── -->
+  <section class="ink" id="objections">
+    <div class="container">
+      <p class="label reveal">Objections anticipées</p>
+      <h2 class="reveal reveal-delay-1">Ce que vos acheteurs<br>ne disent pas à voix haute.</h2>
+      <p class="objections-intro reveal reveal-delay-2">
+        Les freins identifiés en pré-production, avant le tournage. La vidéo y répond par l'image, pas par les mots.
+      </p>
+      <div class="objections-grid">
+
+        <div class="objection-group reveal reveal-delay-1">
+          <p class="objection-cible">GMS</p>
+          <ul class="objection-list">
+            <li>Risque de casse</li>
+            <li>Rotation incertaine</li>
+            <li>Rentabilité</li>
+          </ul>
+        </div>
+
+        <div class="objection-group reveal reveal-delay-2">
+          <p class="objection-cible">CHR</p>
+          <ul class="objection-list">
+            <li>Vitesse de service, praticité</li>
+            <li>Marge, coût par verre</li>
+          </ul>
+        </div>
+
+        <div class="objection-group reveal reveal-delay-3">
+          <p class="objection-cible">B2C</p>
+          <ul class="objection-list">
+            <li>Le goût</li>
+            <li>Le prix</li>
+            <li>Où trouver</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TOURNAGE ───────────────────────────────────────────── -->
+  <section class="ink" id="tournage">
+    <div class="container">
+      <p class="label reveal">La journée de tournage</p>
+      <h2 class="reveal reveal-delay-1">3 lieux · 1 journée · 4 intervenants</h2>
+      <div class="timeline">
+
+        <div class="tl-block reveal reveal-delay-1">
+          <p class="tl-time">08h15 - 12h45</p>
+          <p class="tl-lieu">Distillerie</p>
+          <p class="tl-loc">Baillargues, Hérault</p>
+          <ul class="tl-shots">
+            <li>Champ de canne à sucre, plan drone site</li>
+            <li>Alambic cuivre, vapeur, manipulation</li>
+            <li>Gestes artisans : étiquetage, bouchage, contrôle qualité</li>
+            <li>Packshots flasques et liqueur de chèvre</li>
+            <li>Transition : bouteille distillerie vers rayon</li>
+            <li>Interviews Cédric et Nathalie</li>
+          </ul>
+          <p class="tl-intervenants">Cédric Carpentier · Nathalie</p>
+        </div>
+
+        <div class="tl-block reveal reveal-delay-2">
+          <p class="tl-time">14h30 - 16h15</p>
+          <p class="tl-lieu">Leclerc Saint-Aunès</p>
+          <p class="tl-loc">GMS, Hérault</p>
+          <ul class="tl-shots">
+            <li>Mise en rayon, facing, tête de gondole</li>
+            <li>Plan large rayon boissons</li>
+            <li>Client qui prend une bouteille</li>
+            <li>Interview Rémi</li>
+          </ul>
+          <p class="tl-intervenants">Rémi - Leclerc Saint-Aunès</p>
+        </div>
+
+        <div class="tl-block reveal reveal-delay-3">
+          <p class="tl-time">17h15 - 19h00</p>
+          <p class="tl-lieu">Bar TUB</p>
+          <p class="tl-loc">Montpellier, CHR</p>
+          <ul class="tl-shots">
+            <li>Produit sur étagère et sur le bar</li>
+            <li>Préparation cocktail, service au verre</li>
+            <li>Stockage bidon 5L en réserve</li>
+            <li>Ambiance bar, détails déco</li>
+            <li>Interview Nicolas</li>
+          </ul>
+          <p class="tl-intervenants">Nicolas - fondateur bar TUB</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUESTIONS INTERVIEW ────────────────────────────────── -->
+  <section class="paper" id="questions">
+    <div class="container">
+      <p class="label reveal">Questions interview préparées</p>
+      <h2 class="reveal reveal-delay-1">Les questions qui ont guidé<br><em>chaque prise de parole</em>.</h2>
+      <div class="questions-grid">
+
+        <div class="reveal reveal-delay-1">
+          <p class="question-group-name">Cédric Carpentier</p>
+          <p class="question-group-role">Fondateur Hidden Distillery</p>
+          <ul class="question-list">
+            <li>Qu'est-ce qui vous a poussé à cultiver votre propre canne à sucre en Occitanie ?</li>
+            <li>Comment est née la liqueur au lait de chèvre ?</li>
+            <li>Comment définissez-vous la relation avec vos distributeurs ?</li>
+            <li>Quelle est la différence entre un client Hidden Distillery et un partenaire ?</li>
+          </ul>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <p class="question-group-name">Rémi</p>
+          <p class="question-group-role">Leclerc Saint-Aunès, GMS</p>
+          <ul class="question-list">
+            <li>Qu'est-ce qui vous a convaincu de référencer Hidden Distillery ?</li>
+            <li>Comment vos clients réagissent-ils face aux produits en rayon ?</li>
+            <li>Qu'est-ce que ça apporte que les grandes marques ne font pas ?</li>
+          </ul>
+        </div>
+
+        <div class="reveal reveal-delay-3">
+          <p class="question-group-name">Nicolas</p>
+          <p class="question-group-role">Fondateur bar TUB, CHR</p>
+          <ul class="question-list">
+            <li>Quels formats utilisez-vous au quotidien, et pourquoi ?</li>
+            <li>Comment Hidden Distillery s'intègre à votre carte ?</li>
+            <li>Qu'est-ce que vos clients retiennent après avoir goûté ?</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RÉSULTAT ───────────────────────────────────────────── -->
+  <section class="ink" id="resultat">
+    <div class="container">
+      <p class="label reveal">Le résultat</p>
+      <h2 class="reveal reveal-delay-1">La vidéo que<br>cette préparation <em>a rendue possible</em>.</h2>
+      <p class="resultat-intro reveal reveal-delay-2">
+        Ce qui suit n'est pas la pré-production : c'est la suite. La vidéo B2B tournée en novembre 2025,
+        preuve que le travail en amont a fonctionné.
+      </p>
+      <div class="video-wrap reveal reveal-delay-3">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/Id8u4KljVfQ?rel=0&modestbranding=1&color=white"
+          title="Hidden Distillery - Vidéo B2B"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer class="ink">
+    <span class="f-brand">Nicolas Arcivos</span>
+    <span class="f-meta">Pré-Production Stratégique · Hidden Distillery · 2025</span>
+  </footer>
+
+  <script>
+    const PASSWORD = 'HD2025';
+
+    function checkPassword(e) {
+      e.preventDefault();
+      const val = document.getElementById('gate-input').value.trim();
+      if (val === PASSWORD) {
+        const gate = document.getElementById('gate');
+        gate.classList.add('hidden');
+        setTimeout(() => { gate.style.display = 'none'; initReveal(); }, 500);
+      } else {
+        const err = document.getElementById('gate-error');
+        err.textContent = 'Mot de passe incorrect.';
+        document.getElementById('gate-input').value = '';
+        document.getElementById('gate-input').focus();
+        setTimeout(() => { err.textContent = ''; }, 3000);
+      }
+    }
+
+    document.getElementById('gate-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkPassword(e);
+    });
+
+    function initReveal() {
+      const els = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => observer.observe(el));
+    }
+  </script>
+</body>
+</html>
