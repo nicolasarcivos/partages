@@ -877,13 +877,20 @@
   <script>
     const PASSWORD = 'HD2025';
 
+    function unlock() {
+      const gate = document.getElementById('gate');
+      gate.classList.add('hidden');
+      setTimeout(() => { gate.style.display = 'none'; initReveal(); }, 500);
+    }
+
+    if (localStorage.getItem('hd-auth') === '1') { unlock(); }
+
     function checkPassword(e) {
       e.preventDefault();
       const val = document.getElementById('gate-input').value.trim();
       if (val === PASSWORD) {
-        const gate = document.getElementById('gate');
-        gate.classList.add('hidden');
-        setTimeout(() => { gate.style.display = 'none'; initReveal(); }, 500);
+        localStorage.setItem('hd-auth', '1');
+        unlock();
       } else {
         const err = document.getElementById('gate-error');
         err.textContent = 'Mot de passe incorrect.';
