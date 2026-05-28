@@ -99,6 +99,7 @@
     /* ── LAYOUT ───────────────────────────────────────────── */
     section {
       padding: clamp(64px, 10vw, 120px) clamp(24px, 6vw, 80px);
+      overflow-x: clip;
     }
     .ink   { background: var(--ink);   color: var(--paper); }
     .paper { background: var(--paper); color: var(--ink); }
@@ -159,11 +160,12 @@
       margin-bottom: 56px;
     }
     .hero-meta {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 16px 32px;
+      width: fit-content;
     }
-    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
     .hero-stat-num {
       font-family: var(--serif);
       font-size: 2.4rem;
@@ -547,11 +549,12 @@
     @media (max-width: 640px) {
       section { padding: clamp(48px, 8vw, 80px) 20px; }
 
-      #hero h1 { font-size: clamp(2.8rem, 13vw, 4rem); }
-      #hero .sub { font-size: 1rem; }
-      .hero-meta { gap: 24px; }
-      .hero-stat-num { font-size: 2rem; }
-      .hero-stat-label { font-size: 0.68rem; letter-spacing: 0.06em; }
+      #hero { padding-top: 80px; padding-bottom: 64px; }
+      #hero h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
+      #hero .sub { font-size: 0.95rem; }
+      .hero-meta { gap: 12px 24px; }
+      .hero-stat-num { font-size: 1.8rem; }
+      .hero-stat-label { font-size: 0.62rem; letter-spacing: 0.04em; }
 
       #pivot .quote { font-size: clamp(1.3rem, 6vw, 2rem); }
       #pivot .pivot-body { font-size: 0.95rem; }
@@ -883,13 +886,16 @@
       setTimeout(() => { gate.style.display = 'none'; initReveal(); }, 500);
     }
 
-    if (localStorage.getItem('hd-auth') === '1') { unlock(); }
+    function authGet() { try { return localStorage.getItem('hd-auth'); } catch(e) { return null; } }
+    function authSet() { try { localStorage.setItem('hd-auth', '1'); } catch(e) {} }
+
+    if (authGet() === '1') { setTimeout(unlock, 0); }
 
     function checkPassword(e) {
       e.preventDefault();
       const val = document.getElementById('gate-input').value.trim();
       if (val === PASSWORD) {
-        localStorage.setItem('hd-auth', '1');
+        authSet();
         unlock();
       } else {
         const err = document.getElementById('gate-error');
