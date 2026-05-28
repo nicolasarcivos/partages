@@ -17,7 +17,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: var(--sans);
       background: var(--ink);
@@ -25,6 +25,8 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     /* ── GATE ─────────────────────────────────────────────── */
@@ -110,7 +112,7 @@
       color: var(--saffron);
       margin-bottom: 32px;
     }
-    .container { max-width: 1080px; margin: 0 auto; }
+    .container { max-width: 1080px; margin: 0 auto; width: 100%; }
 
     /* ── REVEAL ───────────────────────────────────────────── */
     .reveal {
@@ -543,8 +545,27 @@
 
     /* ── RESPONSIVE ───────────────────────────────────────── */
     @media (max-width: 640px) {
+      section { padding: clamp(48px, 8vw, 80px) 20px; }
+
+      #hero h1 { font-size: clamp(2.8rem, 13vw, 4rem); }
+      #hero .sub { font-size: 1rem; }
+      .hero-meta { gap: 24px; }
+      .hero-stat-num { font-size: 2rem; }
+      .hero-stat-label { font-size: 0.68rem; letter-spacing: 0.06em; }
+
+      #pivot .quote { font-size: clamp(1.3rem, 6vw, 2rem); }
+      #pivot .pivot-body { font-size: 0.95rem; }
+
+      #cibles .cards { grid-template-columns: 1fr; }
+
       .direction-grid { grid-template-columns: 1fr; gap: 32px; }
-      .questions-grid { gap: 32px; }
+
+      .objections-grid { grid-template-columns: 1fr; }
+
+      .timeline { grid-template-columns: 1fr; }
+
+      .questions-grid { grid-template-columns: 1fr; gap: 32px; }
+
       footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
